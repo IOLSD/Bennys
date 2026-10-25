@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>بوابة الورشة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="topbar" id="topbar" hidden></div>
+
+  <main>
+    <!-- ========== صفحة الدخول ========== -->
+    <section class="card" id="loginView">
+      <header class="brand">
+        <div class="brand-text">
+          <h1 data-bind="title"></h1>
+          <span class="sub" data-bind="subtitle"></span>
+        </div>
+        <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3"/>
+          <g fill="currentColor" transform="translate(50 50)">
+            <path d="M-6 -22h12l2 7 6 3 7-3 6 10-5 5v7l5 5-6 10-7-3-6 3-2 7h-12l-2-7-6-3-7 3-6-10 5-5v-7l-5-5 6-10 7 3 6-3z" opacity=".25"/>
+            <circle r="9" fill="#161616"/>
+          </g>
+          <path d="M30 70 L62 38 a9 9 0 1 1 8 8 L38 78 a4 4 0 0 1 -8 -8z" fill="currentColor"/>
+        </svg>
+      </header>
+
+      <hr>
+
+      <form id="loginForm" autocomplete="off">
+        <input class="field" id="username" type="text" placeholder="اسم المستخدم" required>
+        <div class="pass-wrap">
+          <button type="button" class="eye" id="togglePass" aria-label="إظهار كلمة المرور"><i class="fa-solid fa-eye"></i></button>
+          <input class="field" id="password" type="password" placeholder="كلمة المرور" required>
+        </div>
+        <p class="error" id="loginError" hidden>اسم المستخدم أو كلمة المرور غير صحيحة</p>
+        <button class="btn" type="submit">دخول</button>
+      </form>
+
+      <hr>
+      <footer class="foot"></footer>
+    </section>
+
+    <!-- ========== القائمة الرئيسية ========== -->
+    <section class="card" id="menuView" hidden>
+      <header class="brand">
+        <div class="brand-text">
+          <h1 data-bind="title"></h1>
+          <span class="sub" data-bind="subtitle"></span>
+        </div>
+        <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
+          <use href="#"/>
+        </svg>
+      </header>
+
+      <hr>
+      <h2 class="welcome">مرحباً بك: <span id="userName"></span></h2>
+
+      <div class="grid" id="menuGrid"></div>
+
+      <button class="btn ghost" id="logoutBtn">تسجيل الخروج</button>
+
+      <hr>
+      <footer class="foot"></footer>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

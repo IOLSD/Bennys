@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>لوحة التحكم</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0a;--card:#141414;--line:#2a2a2a;--accent:#e8892b;--accent-dim:#9a5a1c;--accent-bg:#2a1d10;--text:#e9e9e9;--muted:#8a8a8a}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Cairo",system-ui,sans-serif;background:var(--bg);color:var(--text);padding:24px 14px;display:flex;justify-content:center}
+  .card{width:100%;max-width:640px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px}
+  h1{font-size:1.1rem;color:var(--accent);margin-bottom:4px}
+  h2{font-size:.95rem;margin:18px 0 8px;color:#fff}
+  .hint{font-size:.78rem;color:var(--muted);line-height:1.9}
+  hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+  input{width:100%;background:transparent;border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--text);font:inherit;outline:none}
+  input:focus{border-color:var(--accent-dim)}
+  button{font:inherit;font-weight:700;cursor:pointer;border-radius:10px;padding:10px 14px;color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-dim)}
+  button:hover{background:#38250f}
+  button.ghost{background:transparent;border-color:var(--line);color:var(--muted)}
+  button.del{background:transparent;border-color:#5a2420;color:#e5584f;padding:8px 10px}
+  .row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-top:8px;align-items:center}
+  .head{font-size:.75rem;color:var(--muted);margin-top:10px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+  .full{width:100%;margin-top:12px}
+  .msg{margin-top:12px;font-size:.85rem;text-align:center;min-height:1.3em}
+  .ok{color:#5fbf7a}.err{color:#e5584f}
+  [hidden]{display:none!important}
+  ol{padding-right:18px}
+  @media(max-width:520px){.row{grid-template-columns:1fr 1fr}.row .del{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>لوحة التحكم — المستخدمين</h1>
+  <p class="hint">تضيف وتعدّل وتحذف المستخدمين، وعند الحفظ ينحفظ التعديل في ملف <b>users.json</b> داخل مستودعك على GitHub.</p>
+
+  <!-- ===== الاتصال ===== -->
+  <section id="connect">
+    <hr>
+    <div class="grid2">
+      <input id="owner" placeholder="اسم حسابك في GitHub" value="IOLSD" dir="ltr">
+      <input id="repo" placeholder="اسم المستودع" value="Bennys" dir="ltr">
+    </div>
+    <input id="token" type="password" placeholder="التوكن (GitHub Token)" dir="ltr" style="margin-top:8px">
+    <label class="hint" style="display:block;margin-top:8px"><input id="remember" type="checkbox" style="width:auto;margin-left:6px">تذكر التوكن في هذا المتصفح فقط</label>
+    <button class="full" id="connectBtn">اتصال</button>
+
+    <h2>كيف أجيب التوكن؟</h2>
+    <ol class="hint">
+      <li>ادخل GitHub ← صورتك ← <b>Settings</b> ← <b>Developer settings</b> ← <b>Personal access tokens</b> ← <b>Fine-grained tokens</b> ← <b>Generate new token</b>.</li>
+      <li>الاسم: أي اسم، والمدة: اختر ما تبي.</li>
+      <li>في <b>Repository access</b> اختر <b>Only select repositories</b> ثم مستودعك فقط.</li>
+      <li>في <b>Permissions</b> ← <b>Repository permissions</b> ← <b>Contents</b> ← اختر <b>Read and write</b>.</li>
+      <li>اضغط <b>Generate token</b> وانسخه والصقه فوق. لا ترسله لأحد.</li>
+    </ol>
+  </section>
+
+  <!-- ===== اللوحة ===== -->
+  <section id="panel" hidden>
+    <hr>
+    <div class="row head" style="margin-top:0"><span>اسم الدخول</span><span>الاسم الظاهر</span><span>كلمة المرور</span><span></span></div>
+    <div id="list"></div>
+    <button class="ghost full" id="addBtn">+ إضافة مستخدم</button>
+    <button class="full" id="saveBtn">حفظ ونشر</button>
+    <button class="ghost full" id="logout">قطع الاتصال</button>
+    <p class="hint" style="margin-top:12px">بعد الحفظ يحتاج الموقع من 30 ثانية إلى دقيقتين عشان يظهر التعديل.</p>
+  </section>
+
+  <p class="msg" id="msg"></p>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+let users = [], sha = null, cfg = {};
+
+function msg(t, ok) { const m = $("#msg"); m.textContent = t; m.className = "msg " + (ok ? "ok" : "err"); }
+
+const b64enc = (s) => { const b = new TextEncoder().encode(s); let x = ""; b.forEach((c) => (x += String.fromCharCode(c))); return btoa(x); };
+const b64dec = (s) => { const x = atob(s.replace(/\n/g, "")); return new TextDecoder().decode(Uint8Array.from(x, (c) => c.charCodeAt(0))); };
+
+const api = (method, body) =>
+  fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/users.json`, {
+    method,
+    headers: { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
+    body: body ? JSON.stringify(body) : undefined
+  });
+
+function render() {
+  const list = $("#list");
+  list.innerHTML = "";
+  users.forEach((u, i) => {
+    const r = document.createElement("div");
+    r.className = "row";
+    ["username", "name", "password"].forEach((k) => {
+      const inp = document.createElement("input");
+      inp.value = u[k] || "";
+      inp.dir = k === "name" ? "auto" : "ltr";
+      inp.oninput = () => (users[i][k] = inp.value);
+      r.appendChild(inp);
+    });
+    const d = document.createElement("button");
+    d.className = "del"; d.textContent = "حذف";
+    d.onclick = () => { if (confirm("حذف المستخدم " + (u.username || "") + "؟")) { users.splice(i, 1); render(); } };
+    r.appendChild(d);
+    list.appendChild(r);
+  });
+}
+
+async function load() {
+  msg("جاري الاتصال...", true);
+  const res = await api("GET");
+  if (res.status === 404) { users = []; sha = null; }
+  else if (res.status === 401 || res.status === 403) { return msg("التوكن غير صحيح أو ما عنده صلاحية على المستودع", false); }
+  else if (!res.ok) { return msg("تعذر الاتصال، تأكد من اسم الحساب والمستودع", false); }
+  else {
+    const j = await res.json();
+    sha = j.sha;
+    try { users = JSON.parse(b64dec(j.content)); } catch { users = []; }
+  }
+  $("#connect").hidden = true; $("#panel").hidden = false;
+  render(); msg("تم الاتصال", true);
+}
+
+$("#connectBtn").onclick = () => {
+  cfg = { owner: $("#owner").value.trim(), repo: $("#repo").value.trim(), token: $("#token").value.trim() };
+  if (!cfg.owner || !cfg.repo || !cfg.token) return msg("عبّ كل الحقول", false);
+  if ($("#remember").checked) localStorage.setItem("adm_cfg", JSON.stringify(cfg));
+  load();
+};
+
+$("#addBtn").onclick = () => { users.push({ username: "", name: "", password: "" }); render(); };
+
+$("#saveBtn").onclick = async () => {
+  const clean = users.map((u) => ({ username: (u.username || "").trim(), name: (u.name || "").trim(), password: u.password || "" }));
+  if (clean.some((u) => !u.username || !u.password)) return msg("كل مستخدم لازم له اسم دخول وكلمة مرور", false);
+  const names = clean.map((u) => u.username.toLowerCase());
+  if (new Set(names).size !== names.length) return msg("فيه اسم دخول مكرر", false);
+  clean.forEach((u) => { if (!u.name) u.name = u.username; });
+  msg("جاري الحفظ...", true);
+  const res = await api("PUT", { message: "Update users", content: b64enc(JSON.stringify(clean, null, 2) + "\n"), ...(sha ? { sha } : {}) });
+  if (!res.ok) {
+    if (res.status === 409 || res.status === 422) return msg("الملف تغيّر من مكان ثاني، اقطع الاتصال واتصل من جديد", false);
+    return msg("فشل الحفظ (" + res.status + ")، تأكد من صلاحية Contents: Read and write", false);
+  }
+  sha = (await res.json()).content.sha;
+  users = clean; render();
+  msg("تم الحفظ. التعديل يظهر في الموقع خلال دقيقة تقريبا", true);
+};
+
+$("#logout").onclick = () => { localStorage.removeItem("adm_cfg"); location.reload(); };
+
+try {
+  const s = JSON.parse(localStorage.getItem("adm_cfg") || "null");
+  if (s && s.token) { cfg = s; $("#owner").value = s.owner; $("#repo").value = s.repo; load(); }
+} catch {}
+</script>
+</body>
+</html>
