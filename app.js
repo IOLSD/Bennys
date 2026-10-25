@@ -44,9 +44,19 @@
     $("#loginView").hidden = logged;
     $("#menuView").hidden = !logged;
     $("#topbar").hidden = !logged;
+    const old = $("#adminTile");
+    if (old) old.remove();
     if (logged) {
       $("#userName").textContent = user.name;
       $("#topbar").textContent = C.welcomeBar;
+      if (user.admin) {
+        const b = document.createElement("button");
+        b.id = "adminTile";
+        b.className = "tile wide";
+        b.innerHTML = '<i class="fa-solid fa-user-gear"></i><span>لوحة التحكم</span>';
+        b.onclick = () => (location.href = "admin.html");
+        grid.appendChild(b);
+      }
     }
   }
 
