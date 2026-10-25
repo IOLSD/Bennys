@@ -21,7 +21,7 @@
   button:hover{background:#38250f}
   button.ghost{background:transparent;border-color:var(--line);color:var(--muted)}
   button.del{background:transparent;border-color:#5a2420;color:#e5584f;padding:8px 10px}
-  .row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-top:8px;align-items:center}
+  .row{display:grid;grid-template-columns:1fr 1fr 1fr auto auto;gap:8px;margin-top:8px;align-items:center}
   .head{font-size:.75rem;color:var(--muted);margin-top:10px}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
   .full{width:100%;margin-top:12px}
@@ -29,7 +29,7 @@
   .ok{color:#5fbf7a}.err{color:#e5584f}
   [hidden]{display:none!important}
   ol{padding-right:18px}
-  @media(max-width:520px){.row{grid-template-columns:1fr 1fr}.row .del{grid-column:1/-1}}
+  @media(max-width:520px){.row{grid-template-columns:1fr 1fr auto}.row .del{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -61,7 +61,7 @@
   <!-- ===== اللوحة ===== -->
   <section id="panel" hidden>
     <hr>
-    <div class="row head" style="margin-top:0"><span>اسم الدخول</span><span>الاسم الظاهر</span><span>كلمة المرور</span><span></span></div>
+    <div class="row head" style="margin-top:0"><span>اسم الدخول</span><span>الاسم الظاهر</span><span>كلمة المرور</span><span>مدير</span><span></span></div>
     <div id="list"></div>
     <button class="ghost full" id="addBtn">+ إضافة مستخدم</button>
     <button class="full" id="saveBtn">حفظ ونشر</button>
@@ -101,6 +101,10 @@ function render() {
       inp.oninput = () => (users[i][k] = inp.value);
       r.appendChild(inp);
     });
+    const c = document.createElement("input");
+    c.type = "checkbox"; c.checked = !!u.admin; c.style.width = "20px";
+    c.onchange = () => (users[i].admin = c.checked);
+    r.appendChild(c);
     const d = document.createElement("button");
     d.className = "del"; d.textContent = "حذف";
     d.onclick = () => { if (confirm("حذف المستخدم " + (u.username || "") + "؟")) { users.splice(i, 1); render(); } };
@@ -131,10 +135,10 @@ $("#connectBtn").onclick = () => {
   load();
 };
 
-$("#addBtn").onclick = () => { users.push({ username: "", name: "", password: "" }); render(); };
+$("#addBtn").onclick = () => { users.push({ username: "", name: "", password: "", admin: false }); render(); };
 
 $("#saveBtn").onclick = async () => {
-  const clean = users.map((u) => ({ username: (u.username || "").trim(), name: (u.name || "").trim(), password: u.password || "" }));
+  const clean = users.map((u) => ({ username: (u.username || "").trim(), name: (u.name || "").trim(), password: u.password || "", ...(u.admin ? { admin: true } : {}) }));
   if (clean.some((u) => !u.username || !u.password)) return msg("كل مستخدم لازم له اسم دخول وكلمة مرور", false);
   const names = clean.map((u) => u.username.toLowerCase());
   if (new Set(names).size !== names.length) return msg("فيه اسم دخول مكرر", false);
