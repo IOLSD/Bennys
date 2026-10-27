@@ -2,11 +2,11 @@
 //  إعدادات الموقع — عدّل هنا فقط
 // ============================================================
 window.SITE_CONFIG = {
-  title: "Los Santos Garage",        // العنوان الإنجليزي أعلى البطاقة
+  title: "Bennys",        // العنوان الإنجليزي أعلى البطاقة
   subtitle: "Workshop",              // السطر الصغير البرتقالي
-  welcomeBar: "Welcome to the Workshop",
-  footerOwner: "Name Here",          // صاحب الحقوق
-  footerNote: "lsc | الحقوق محفوظة لـ",
+  welcomeBar: "Welcome to the Bennys",
+  footerOwner: "Nawwf",          // صاحب الحقوق
+  footerNote: "Bennys | الحقوق محفوظة لـ",
   creditLabel: "",                   // اكتب اسم المطور في creditName وتظهر سطر ثاني في الفوتر
   creditName: "",                    // اتركه فاضي لإخفاء السطر
 
