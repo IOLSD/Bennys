@@ -19,7 +19,7 @@ window.SITE_CONFIG = {
     { label: "الاستقالة",        icon: "fa-user-slash",         url: "" },
     // { label: "التقارير",         icon: "fa-file-lines",         url: "" },
     // { label: "تقييم الأداء",     icon: "fa-star",               url: "" },
-    { label: "التقديم على الورشة", icon: "fa-id-card",          url: "" },
+    { label: "التقديم على الورشة", icon: "fa-id-card",          url: "https://docs.google.com/forms/d/e/1FAIpQLSfK_VP0I_MvtDDfhiUJEq62ZrDZRwdLjFFcF3-udkxwoeMz_g/viewform" },
     { label: "المستودع",         icon: "fa-warehouse",          url: "" },
     // { label: "حاسبة الساعات",   icon: "fa-clock",              url: "", wide: true }
   ]
