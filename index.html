@@ -11,11 +11,11 @@
 </head>
 <body>
 
-  <div class="topbar" id="topbar" hidden></div>
+  <div class="topbar" id="topbar"></div>
 
   <main>
-    <!-- ========== صفحة الدخول ========== -->
-    <section class="card" id="loginView">
+    <!-- ========== القائمة الرئيسية ========== -->
+    <section class="card" id="menuView">
       <header class="brand">
         <div class="brand-text">
           <h1 data-bind="title"></h1>
@@ -33,39 +33,9 @@
       </header>
 
       <hr>
-
-      <form id="loginForm" autocomplete="off">
-        <input class="field" id="username" type="text" placeholder="اسم المستخدم" required>
-        <div class="pass-wrap">
-          <button type="button" class="eye" id="togglePass" aria-label="إظهار كلمة المرور"><i class="fa-solid fa-eye"></i></button>
-          <input class="field" id="password" type="password" placeholder="كلمة المرور" required>
-        </div>
-        <p class="error" id="loginError" hidden>اسم المستخدم أو كلمة المرور غير صحيحة</p>
-        <button class="btn" type="submit">دخول</button>
-      </form>
-
-      <hr>
-      <footer class="foot"></footer>
-    </section>
-
-    <!-- ========== القائمة الرئيسية ========== -->
-    <section class="card" id="menuView" hidden>
-      <header class="brand">
-        <div class="brand-text">
-          <h1 data-bind="title"></h1>
-          <span class="sub" data-bind="subtitle"></span>
-        </div>
-        <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
-          <use href="#"/>
-        </svg>
-      </header>
-
-      <hr>
-      <h2 class="welcome">مرحباً بك: <span id="userName"></span></h2>
+      <h2 class="welcome">مرحباً بك</h2>
 
       <div class="grid" id="menuGrid"></div>
-
-      <button class="btn ghost" id="logoutBtn">تسجيل الخروج</button>
 
       <hr>
       <footer class="foot"></footer>
