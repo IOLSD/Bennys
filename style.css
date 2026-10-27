@@ -1,11 +1,11 @@
-/* ستايل داكن: فحمي + أصفر الورشة + خطوط تحذير */
+/* ستايل داكن: فحمي + سماوي الشعار + خطوط تحذير */
 :root{
   --bg:#0b0b0c;
   --card:#141416;
   --card-2:#1c1c1f;
   --line:#2c2c30;
-  --accent:#ffc400;
-  --accent-soft:rgba(255,196,0,.12);
+  --accent:#14c9e8;
+  --accent-soft:rgba(20,201,232,.12);
   --text:#ececec;
   --muted:#8b8b92;
 }
@@ -15,7 +15,7 @@ body{
   font-family:"Cairo",system-ui,sans-serif;
   color:var(--text);
   background:
-    radial-gradient(700px 420px at 50% 0%, rgba(255,196,0,.09), transparent 65%),
+    radial-gradient(700px 420px at 50% 0%, rgba(20,201,232,.09), transparent 65%),
     linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px) 0 0/30px 30px,
     linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px) 0 0/30px 30px,
     var(--bg);
@@ -38,7 +38,7 @@ main{flex:1;display:flex;justify-content:center;align-items:center;padding:32px 
 .card{
   width:100%;max-width:420px;background:var(--card);
   border:1px solid var(--line);border-radius:18px;padding:30px 22px 22px;
-  box-shadow:0 24px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(255,196,0,.04), 0 0 50px rgba(255,196,0,.05);
+  box-shadow:0 24px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(20,201,232,.04), 0 0 50px rgba(20,201,232,.05);
   position:relative;overflow:hidden;
 }
 .card::before{
@@ -72,7 +72,7 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
 .tile i{font-size:1.3rem;color:var(--accent);transition:color .18s, transform .18s}
 .tile:hover{
   transform:translateY(-3px);border-color:var(--accent);background:var(--accent);color:#111;
-  box-shadow:0 10px 24px rgba(255,196,0,.25);
+  box-shadow:0 10px 24px rgba(20,201,232,.25);
 }
 .tile:hover i{color:#111;transform:scale(1.12)}
 .tile:active{transform:translateY(0) scale(.98)}
