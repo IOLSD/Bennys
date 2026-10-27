@@ -17,8 +17,8 @@ window.SITE_CONFIG = {
     { label: "جدول الورشة",     icon: "fa-calendar-days",      url: "https://docs.google.com/spreadsheets/d/1yD9kEXluaN6Df5zQDMUp5anJ1CbKZakZJg1PZc2-JHI/edit?gid=430321705#gid=430321705" },
     { label: "الإجازات",         icon: "fa-plane-departure",    url: "https://discord.com/channels/1563573174711623800/1563593506352664646/1563600465214840844" },
     { label: "الاستقالة",        icon: "fa-user-slash",         url: "" },
-    { label: "التقارير",         icon: "fa-file-lines",         url: "" },
-    { label: "تقييم الأداء",     icon: "fa-star",               url: "" },
+    // { label: "التقارير",         icon: "fa-file-lines",         url: "" },
+    // { label: "تقييم الأداء",     icon: "fa-star",               url: "" },
     { label: "التقديم على الورشة", icon: "fa-id-card",          url: "" },
     { label: "المستودع",         icon: "fa-warehouse",          url: "" },
     // { label: "حاسبة الساعات",   icon: "fa-clock",              url: "", wide: true }
